@@ -2,13 +2,13 @@
   <form nz-form nzLayout="vertical" [formGroup]="ngForm" (submit)="submit(ngForm.value)">
     <nz-form-item>
       <nz-form-label nzFor="username">Username</nz-form-label>
-      <nz-form-control>
+      <nz-form-control [nzErrorTip]="ErrorUserName">
           <input class="ant-input" type="text" name="username" id="username" formControlName="username" autocomplete="username">
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
       <nz-form-label nzFor="password">Mot de passe</nz-form-label>
-      <nz-form-control>
+      <nz-form-control [nzErrorTip]="ErrorPassword">
           <input class="ant-input" type="password" name="password" id="password" formControlName="password" autocomplete="current-password">
       </nz-form-control>
     </nz-form-item>
@@ -23,3 +23,16 @@
   <!-- TODO Rediriger sur la page de login au clic sur le bouton -->
   <button class="register-button" nz-button nzType="primary" (click)="goToRegistration()">Créer un compte</button>
 </div>
+
+<ng-template #ErrorPassword>
+  {{ngForm.get('password').errors[0]}}
+  <div *ngIf="ngForm.get('password').dirty && ngForm.get('password').errors">
+    Le mot de passe est obligatoire
+  </div>
+</ng-template>
+
+<ng-template #ErrorUserName>
+  <div *ngIf="ngForm.get('username').dirty && ngForm.get('username').errors">
+    Le username est obligatoire
+  </div>
+</ng-template>
