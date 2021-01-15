@@ -1,33 +1,36 @@
 <div class="login">
-  <form nz-form nzLayout="vertical" #f="ngForm" (submit)="submit()">
+  <form nz-form nzLayout="vertical" [formGroup]="ngForm" (submit)="submit(ngForm.value)">
     <nz-form-item>
       <nz-form-label nzFor="username">Username</nz-form-label>
-      <nz-form-control>
-        <!--
-          TODO Ajouter l'input pour username avec le data-binding approprié
-          <input class="ant-input" type="text" name="username" id="username" #username="ngModel">
-         -->
-
+      <nz-form-control [nzErrorTip]="ErrorUserName">
+          <input class="ant-input" type="text" name="username" id="username" formControlName="username" autocomplete="username">
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
       <nz-form-label nzFor="password">Mot de passe</nz-form-label>
-      <nz-form-control>
-        <!--
-          TODO Ajouter l'input pour password avec le data-binding approprié
-          <input class="ant-input" type="password" name="password" id="password" #password="ngModel">
-         -->
+      <nz-form-control [nzErrorTip]="ErrorPassword">
+          <input class="ant-input" type="password" name="password" id="password" formControlName="password" autocomplete="current-password">
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
       <nz-form-control>
-        <button class="login-button" type="submit" nz-button nzType="default" [disabled]="f.form.invalid"
-          (submit)="submit()">Connexion</button>
+        <button class="login-button" type="submit" nz-button nzType="default" [disabled]="ngForm.invalid">Connexion</button>
       </nz-form-control>
     </nz-form-item>
   </form>
   <p class="divider">Pas encore enregistré ?</p>
 
-  <!-- TODO Rediriger sur la page de login au clic sur le bouton -->
-  <button class="register-button" nz-button nzType="primary">Créer un compte</button>
+  <button class="register-button" nz-button nzType="primary" (click)="goToRegistration()">Créer un compte</button>
 </div>
+
+<ng-template #ErrorPassword>
+  <div *ngIf="ngForm.get('password').dirty && ngForm.get('password').errors">
+    Le mot de passe est obligatoire
+  </div>
+</ng-template>
+
+<ng-template #ErrorUserName>
+  <div *ngIf="ngForm.get('username').dirty && ngForm.get('username').errors">
+    Le username est obligatoire
+  </div>
+</ng-template>

@@ -1,6 +1,12 @@
-<nz-modal [(nzVisible)]="isVisible" nzTitle="Nouvelle room" (nzOnCancel)="onCancel()" (nzOnOk)="onOk()">
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Nouvelle room" [nzFooter]="modalFooter" (nzOnCancel)="onCancel()">
   <form nz-form nzLayout="vertical" #f="ngForm">
-    <!--TODO-->
+    <!--DONE-->
+    <nz-form-item>
+      <nz-form-label nzFor="name">Nom de la room</nz-form-label>
+      <nz-form-control nzErrorTip="Nom obligatoire">
+        <input class="ant-input" type="text" name="name" id="name" #nom="ngModel" [(ngModel)]="model.name" required>
+      </nz-form-control>
+    </nz-form-item>
     <nz-form-item>
       <nz-form-label nzFor="name">Type</nz-form-label>
       <nz-form-control nzErrorTip="Type obligatoire">
@@ -10,4 +16,9 @@
       </nz-form-control>
     </nz-form-item>
   </form>
+
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="onCancel()">Cancel</button>
+    <button nz-button nzType="primary" (click)="onOk()" [disabled]="!model.name || !model.type">Ok</button>
+  </ng-template>
 </nz-modal>

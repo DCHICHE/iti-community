@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { RoomType } from '../../room.model';
 import { RoomService } from '../../services/room.service';
+import { Router } from '@angular/router';
+import { RoomStore } from '../../room.store';
 
 export class CreateRoomFormModel {
   name: string = "";
@@ -20,7 +22,7 @@ export class RoomCreateModalComponent implements OnInit {
   isVisible: boolean = false;
   model = new CreateRoomFormModel();
 
-  constructor(private roomService: RoomService) {
+  constructor(private roomService: RoomService, private router: Router) {
 
   }
 
@@ -29,8 +31,10 @@ export class RoomCreateModalComponent implements OnInit {
 
   async onOk() {
     if (this.form.form.valid) {
-      // TODO invoquer la méthode create du RoomService
+      // DONE invoquer la méthode create du RoomService
+      let room = await this.roomService.create(this.model.name, this.model.type);
       this.close();
+      this.router.navigate(['app', room.id]);
     }
   }
 
