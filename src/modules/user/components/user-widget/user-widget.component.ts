@@ -1,3 +1,4 @@
+import { ViewChild } from '@angular/core';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -6,6 +7,7 @@ import { AuthenticationService } from 'src/modules/authentication/services/authe
 import { UserService } from '../../services/user.service';
 import { User } from '../../user.model';
 import { UserStore } from '../../user.store';
+import { UserProfileModalComponent } from '../user-profile-modal/user-profile-modal.component';
 
 @Component({
   selector: 'app-user-widget',
@@ -15,6 +17,9 @@ import { UserStore } from '../../user.store';
 export class UserWidgetComponent implements OnInit {
   @Output()
   toggleNotifications: EventEmitter<void> = new EventEmitter();
+
+  @ViewChild("modal")
+  modal: UserProfileModalComponent;
 
   user$: Observable<User | undefined>;
 
@@ -28,8 +33,7 @@ export class UserWidgetComponent implements OnInit {
     private store: UserStore
   ) {
     this.user$ = store.user$;
-    this.user$.subscribe( (usr) => this.currentUser = usr);
-    this.currentUser?.photoUrl
+    this.user$.subscribe( (usr: any) => this.currentUser = usr);
   }
 
   ngOnInit(): void {
@@ -44,8 +48,10 @@ export class UserWidgetComponent implements OnInit {
       nzTitle: "Déconnexion",
       nzContent: "Êtes-vous sûr(e) de vouloir déconnecter votre session ?",
       nzOkText: "Déconnexion",
-      nzOnOk: () => {
-        // TODO logout puis rediriger vers "/splash/login"
+      nzOnOk: async () => {
+        // DONE logout puis rediriger vers "/splash/login"
+        await this.authService.logout();
+        await this.router.navigate(['splash', 'login']);
       }
     });
   }

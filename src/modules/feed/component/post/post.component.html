@@ -16,6 +16,9 @@
 
   <p class="post-text">
     {{post.message.text.content}}
+
+    <iframe *ngIf="hasUrl" [src]='data' >
+    </iframe>
   </p>
 
   <!-- Itérer sur les "attachements" du message -->
