@@ -47,6 +47,7 @@ export class UserRegistrationComponent implements OnInit {
     }
 
     // TODO Enregistrer l'utilisateur via le UserService
+    this._userService.register(this.registerForm.value.username,this.registerForm.value.password)
     this.goToLogin();
   }
 

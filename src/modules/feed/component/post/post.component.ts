@@ -19,7 +19,7 @@ export class PostComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.post);
+    console.log(this.post)
   }
 
   ngAfterViewInit() {

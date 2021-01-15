@@ -1,10 +1,13 @@
 <div class="post">
   <div class="post-author-name">
+    {{post.createdBy.username}}
   </div>
 
   <!-- TIPS: [ngStyle]="{'background-image': url(...) }" -->
-  <div class="post-author-photo"></div>
-  <div class="post-date"></div>
+  <div class="post-author-photo"  [ngStyle]="{'background-image': 'url(' + post.createdBy.photoUrl + ')'}"></div>
+  <div class="post-date">
+    {{post.createdAt}}
+  </div>
 
   <!-- TIPS: [ngClass]="{liked: [expression booléenne]}" -->
   <div class="post-user-like">
