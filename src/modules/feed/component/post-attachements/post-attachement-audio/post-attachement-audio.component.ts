@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MessageImageElement } from '../../../post.model';
+import { MessageImageElement, MessageAudioElement } from '../../../post.model';
 
 @Component({
   selector: 'app-post-attachement-audio',
@@ -8,7 +8,7 @@ import { MessageImageElement } from '../../../post.model';
 })
 export class PostAttachementAudioComponent implements OnInit {
   @Input()
-  element: MessageImageElement;
+  element: MessageAudioElement;
 
   constructor() { }
 

@@ -38,7 +38,7 @@ export class LocalPostCommands extends PostCommands {
     async like(roomId: string, postId: string): Promise<void> {
         const posts = this.storage.getValue();
         posts[roomId] = posts[roomId] || [];
-        
+
         const post = posts[roomId].find(p => p.id === postId);
         if(!post) {
             throw Error("Post not found");

@@ -1,3 +1,8 @@
 <div class="post-attachement-audio">
-  <!-- Balise audio -->
+  <audio controls>
+    <source [src]="element.url" type="audio/ogg">
+    <source [src]="element.url" type="audio/mpeg">
+    <source [src]="element.url" type="audio/wav">
+  Your browser does not support the audio element.
+  </audio>
 </div>
