@@ -1,6 +1,6 @@
 <div class="user-widget">
   <div class="user-widget-photo">
-    <img [src]="currentUser?.photoUrl"></img>
+    <img *ngIf="currentUser && currentUser.photoUrl" [src]="currentUser?.photoUrl" />
   </div>
   <div class="user-widget-actions">
     <button nz-button nzType="default" nzGhost (click)="modal.open()"><i nz-icon nzType="edit"></i></button>

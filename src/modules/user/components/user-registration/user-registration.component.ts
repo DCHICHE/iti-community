@@ -41,12 +41,13 @@ export class UserRegistrationComponent implements OnInit {
 
   async submit() {
 
-    // TODO  Vérifier que la confirmation de mot de passe correspond au mot de passe
+    // DONE  Vérifier que la confirmation de mot de passe correspond au mot de passe
     if (this.registerForm.invalid) {
       return;
     }
 
-    // TODO Enregistrer l'utilisateur via le UserService
+    // DONE Enregistrer l'utilisateur via le UserService
+    this._userService.register(this.registerForm.value.username, this.registerForm.value.password);
     this.goToLogin();
   }
 
