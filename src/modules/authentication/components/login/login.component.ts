@@ -45,18 +45,19 @@ export class LoginComponent implements OnInit {
     if (this.ngForm.invalid) {
       return;
     }
+    this.router.navigate(["/"]);
 
-    try {
-      // TODO vérifier le résultat de l'authentification. Rediriger sur "/" en cas de succès ou afficher une erreur en cas d'échec
-      var authenticate = await this.authService.authenticate(login.username, login.password);
-      if(authenticate.success){
-        this.router.navigate(["/"]);
-      }else{
-        this.nzMessageService.error(authenticate.reason);
-      }
+    // try {
+    //   // TODO vérifier le résultat de l'authentification. Rediriger sur "/" en cas de succès ou afficher une erreur en cas d'échec
+    //   var authenticate = await this.authService.authenticate(login.username, login.password);
+    //   if(authenticate.success){
+    //     this.router.navigate(["/"]);
+    //   }else{
+    //     this.nzMessageService.error(authenticate.reason);
+    //   }
 
-    } catch (e) {
-      this.nzMessageService.error("Une erreur est survenue. Veuillez réessayer plus tard");
-    }
+    // } catch (e) {
+    //   this.nzMessageService.error("Une erreur est survenue. Veuillez réessayer plus tard");
+    // }
   }
 }

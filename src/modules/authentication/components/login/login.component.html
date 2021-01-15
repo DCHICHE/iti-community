@@ -20,12 +20,10 @@
   </form>
   <p class="divider">Pas encore enregistré ?</p>
 
-  <!-- TODO Rediriger sur la page de login au clic sur le bouton -->
   <button class="register-button" nz-button nzType="primary" (click)="goToRegistration()">Créer un compte</button>
 </div>
 
 <ng-template #ErrorPassword>
-  {{ngForm.get('password').errors[0]}}
   <div *ngIf="ngForm.get('password').dirty && ngForm.get('password').errors">
     Le mot de passe est obligatoire
   </div>

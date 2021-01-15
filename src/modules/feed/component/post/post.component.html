@@ -1,5 +1,6 @@
 <div class="post">
-  <div class="post-author-name"></div>
+  <div class="post-author-name">
+  </div>
 
   <!-- TIPS: [ngStyle]="{'background-image': url(...) }" -->
   <div class="post-author-photo"></div>
@@ -11,7 +12,7 @@
   </div>
 
   <p class="post-text">
-    <!-- Afficher le texte du poste uniquement-->
+    {{post.message.text.content}}
   </p>
 
   <!-- Itérer sur les "attachements" du message -->

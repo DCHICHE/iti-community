@@ -13,7 +13,7 @@ const routes: Routes = [{
   pathMatch: "prefix"
 }, {
   path: "app",
-  canActivate: [AuthenticatedGuard],
+  // canActivate: [AuthenticatedGuard],
   component: AppLayoutComponent,
   children: [{
     path: ":roomId",

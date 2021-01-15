@@ -18,6 +18,8 @@ export class UserWidgetComponent implements OnInit {
 
   user$: Observable<User | undefined>;
 
+  currentUser: User | undefined;
+
   constructor(
     private authService: AuthenticationService,
     private router: Router,
@@ -26,6 +28,8 @@ export class UserWidgetComponent implements OnInit {
     private store: UserStore
   ) {
     this.user$ = store.user$;
+    this.user$.subscribe( (usr) => this.currentUser = usr);
+    this.currentUser?.photoUrl
   }
 
   ngOnInit(): void {
