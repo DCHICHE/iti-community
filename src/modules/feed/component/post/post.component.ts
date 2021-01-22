@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { Post } from '../../post.model';
+import { Post, PostData } from '../../post.model';
 import { PostService } from '../../services/post.service';
 
 @Component({
@@ -11,15 +11,16 @@ export class PostComponent implements OnInit, AfterViewInit {
   @Input()
   post: Post;
 
+  postData : PostData
+
   @ViewChild("anchor")
   anchor: ElementRef<HTMLDivElement>;
 
   constructor(
-    private postService: PostService
+    private postService: PostService,
   ) { }
 
-  ngOnInit(): void {
-    console.log(this.post);
+  async ngOnInit() {
   }
 
   ngAfterViewInit() {
@@ -27,6 +28,7 @@ export class PostComponent implements OnInit, AfterViewInit {
   }
 
   async like() {
-    // TODO like du post
+    this.postService.like(this.post);
+    this.post.liked = true;
   }
 }

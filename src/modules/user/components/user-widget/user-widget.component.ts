@@ -33,14 +33,20 @@ export class UserWidgetComponent implements OnInit {
     private store: UserStore
   ) {
     this.user$ = store.user$;
-    this.user$.subscribe( (usr: any) => this.currentUser = usr);
+    this.user$.subscribe((usr: any) => this.currentUser = usr);
   }
 
   ngOnInit(): void {
+    if (this.currentUser?.photoUrl) {
+      const element = document.getElementsByClassName('user-widget-photo');
+      if (element) {
+        element[0].setAttribute("style",'background-image:url(' + this.currentUser.photoUrl + ')')
+      }
+    }
   }
 
   fireToggleNotificaions() {
-      this.toggleNotifications.emit();
+    this.toggleNotifications.emit();
   }
 
   logout() {
