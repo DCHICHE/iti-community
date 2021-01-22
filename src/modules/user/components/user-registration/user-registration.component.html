@@ -2,8 +2,16 @@
   <form nz-form nzLayout="vertical" name="registerForm" [formGroup]="registerForm" (ngSubmit)="submit()">
     <nz-form-item>
       <nz-form-label nzFor="username" nzRequired>Nom d'utilisateur</nz-form-label>
-      <nz-form-control nzErrorTip="Veuillez choisir un nom d'utilisateur !">
+      <nz-form-control [nzErrorTip]="usernameError">
         <input class="ant-input" type="text" name="username" id="username" formControlName="username" autocomplete="username">
+        <ng-template #usernameError>
+          <ng-container *ngIf="registerForm.get('username')!.hasError('usernameAlreadyExists')">
+            Ce nom d'utilisateur est déjà pris.
+          </ng-container>
+          <ng-container *ngIf="registerForm.get('username')!.hasError('required')">
+            Veuillez choisir un nom d'utilisateur
+          </ng-container>
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>

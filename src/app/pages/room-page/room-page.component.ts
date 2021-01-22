@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { FeedStore } from 'src/modules/feed/feed.store';
 import { map } from 'rxjs/operators';
+import { SocketIoWebsocketConnection } from 'src/modules/common/SocketIoWebsocketConnection';
 
 @Component({
   selector: 'app-room-page',
@@ -11,11 +12,13 @@ import { map } from 'rxjs/operators';
 })
 export class RoomPageComponent implements OnInit {
   roomId$: Observable<string>;
+  connection: SocketIoWebsocketConnection<any>;
   constructor(private route: ActivatedRoute, private feedStore: FeedStore) {
 
   }
 
   ngOnInit(): void {
+    this.connection = new SocketIoWebsocketConnection('localhost');
     this.roomId$ = this.route.params.pipe(map(p => p.roomId));
     this.roomId$.subscribe({
       next: (roomId) => {

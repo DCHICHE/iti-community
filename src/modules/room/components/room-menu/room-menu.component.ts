@@ -7,6 +7,7 @@ import { RoomStore } from '../../room.store';
 import { RoomQueries } from '../../services/room.queries';
 import { RoomService } from '../../services/room.service';
 import { RoomCreateModalComponent } from '../room-create-modal/room-create-modal.component';
+import { RoomState } from '../../room.state';
 
 @Component({
   selector: 'app-room-menu',
@@ -21,16 +22,20 @@ export class RoomMenuComponent implements OnInit {
 
   rooms: Room[];
 
-  constructor(private feedStore: FeedStore, private queries: RoomQueries, private roomService: RoomService, private router: Router) {
+  constructor(private feedStore: FeedStore, private queries: RoomQueries, private roomService: RoomService, private router: Router, private roomStore: RoomStore) {
     this.roomId$ = feedStore.roomId$;
-    this.rooms = [];
+    this.roomStore.value$.subscribe(state => this.rooms =  state.rooms);
   }
 
   async ngOnInit() {
-    this.rooms = await this.queries.getAll();
-    console.log(this.rooms);
+    const rooms = await this.queries.getAll();
+    const roomState :RoomState = {
+      rooms : rooms
+    }
+    this.roomStore.set(roomState);
     const roomId = localStorage.getItem('roomId');
     if(roomId) this.router.navigate(["app", roomId]);
+
   }
 
   goToRoom(room: Room) {

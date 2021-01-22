@@ -22,7 +22,10 @@ export class RoomCreateModalComponent implements OnInit {
   isVisible: boolean = false;
   model = new CreateRoomFormModel();
 
-  constructor(private roomService: RoomService, private router: Router) {
+  constructor(
+    private roomService: RoomService,
+    private router: Router,
+    ) {
 
   }
 
@@ -34,7 +37,6 @@ export class RoomCreateModalComponent implements OnInit {
       // DONE invoquer la méthode create du RoomService
       let room = await this.roomService.create(this.model.name, this.model.type);
       this.close();
-      this.router.navigate(['app', room.id]);
     }
   }
 

@@ -9,7 +9,6 @@ export class PostMapper {
   }
 
   private parseMessage(message: string): PostMessage {
-    debugger;
     // TODO rajouter png jpg et gif
     const pictureRegex = /http[s]?:\/\/.+\.(jpeg|jpg|gif|png)/gmi;
 

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Post, PostData } from '../../post.model';
 import { PostService } from '../../services/post.service';
+import { DateTime } from 'luxon';
 
 @Component({
   selector: 'app-post',
@@ -12,6 +13,10 @@ export class PostComponent implements OnInit, AfterViewInit {
   post: Post;
 
   postData : PostData
+
+  public get dateZone(){
+    return DateTime.fromISO( this.post.createdAt as string, {zone: 'local'} ).toString();
+  }
 
   @ViewChild("anchor")
   anchor: ElementRef<HTMLDivElement>;

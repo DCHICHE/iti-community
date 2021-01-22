@@ -6,6 +6,8 @@ import { RoomQueries } from './room.queries';
 
 @Injectable()
 export class RoomService {
+    // private _rooms: BehaviorSubject<
+
     constructor(private commands: RoomCommands, private queries: RoomQueries, private store: RoomStore) {
     }
 

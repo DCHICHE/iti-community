@@ -1,7 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { NgForm, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn, AsyncValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { User } from '../../user.model';
+import { UserQueries } from '../../services/user.queries';
+import { of } from 'rxjs/internal/observable/of';
+import { Observable, from } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 class UserRegistrationFormModel {
   username = "";
@@ -20,20 +25,21 @@ export class UserRegistrationComponent implements OnInit {
 
   public registerForm: FormGroup;
   model = new UserRegistrationFormModel();
+  users: User[]
 
   constructor(
     private _router: Router,
     private _userService: UserService,
-    private _formBuilder: FormBuilder
-    ) {
+    private _formBuilder: FormBuilder,
+  ) {
     this.registerForm = this._formBuilder.group({
-      username: ['', [Validators.required]],
+      username: ['', [Validators.required, this.validateUsername.bind(this)]],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required]
     },
-    {
-      validator: this.areEquals('password', 'confirmPassword', 'missmatch')
-    });
+      {
+        validators: this.areEquals('password', 'confirmPassword', 'missmatch')
+      });
   }
 
   ngOnInit(): void {
@@ -68,8 +74,20 @@ export class UserRegistrationComponent implements OnInit {
           return null;
         }
 
-        abstractControlB.setErrors({[errorKey]: true});
+        abstractControlB.setErrors({ [errorKey]: true });
       }
     };
   };
+
+  //CODE MADE BY MELVIN DELPIERRE JE NE SUIS PAS REPONSPONSABLE DE CA -Dan
+  // Et j'en suis fier 💩 - Melvin
+  private validateUsername(control: AbstractControl): ValidationErrors | null {
+    this._userService.exist(control.value).then( result => {
+      if (result === true) {
+        control.setErrors( {'usernameAlreadyExists': true});
+      }
+    } );
+    return null;
+  }
+
 }
