@@ -14,8 +14,8 @@
     <i nz-icon nzType="heart" [nzTheme]="post.liked ? 'fill' : 'outline'"></i>
   </div>
 
-  <p class="post-text">
-    {{post.message.text.content}}
+  <p class="post-text" [innerHTML]="post.message.text.content">
+    <!-- {{post.message.text.content}} -->
   </p>
 
   <!-- Itérer sur les "attachements" du message -->

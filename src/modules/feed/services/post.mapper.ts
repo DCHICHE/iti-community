@@ -21,45 +21,60 @@ export class PostMapper {
     const youtubeRegex = /(http[s]?:\/\/)?www\.(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/gmi;
     const attachements: MessageElement[] = [];
 
-    const pictureMatche = pictureRegex.exec(message);
+    const pictureMatche = message.match(pictureRegex);
     if (pictureMatche) {
      // TODO ajouter un attachement de type image dans attachements
-      const picture : MessageImageElement ={
-        url : pictureMatche[0],
-        type : "image"
-      }
-      attachements.push(picture)
+     const picture : MessageImageElement = {
+       url : pictureMatche[0],
+       type : "image"
+      };
+      attachements.push(picture);
 
+      pictureMatche.forEach(link => {
+        message = message.replace(link, `<a href='${link}'>${link}</a>`)
+      });
     }
 
-    const videoMatche = videoRegex.exec(message)
+    const videoMatche = message.match(videoRegex);
     if (videoMatche) {
      // TODO ajouter un attachement de type video dans attachements
-      const video : MessageVideoElement ={
+      const video : MessageVideoElement = {
         url : videoMatche[0],
         type : "video"
-      }
-      attachements.push(video)
+      };
+      attachements.push(video);
+
+      videoMatche.forEach(link => {
+        message = message.replace(link, `<a href='${link}'>${link}</a>`)
+      });
     }
 
-    const audioMatche = audioRegex.exec(message)
+    const audioMatche = message.match(audioRegex);
     if (audioMatche) {
      // TODO ajouter un attachement de type audio dans attachements
-      const audio : MessageAudioElement ={
+      const audio : MessageAudioElement = {
         url : audioMatche[0],
         type : "audio"
-      }
-      attachements.push(audio)
+      };
+      attachements.push(audio);
+
+      audioMatche.forEach(link => {
+        message = message.replace(link, `<a href='${link}'>${link}</a>`)
+      });
     }
 
-    const youtubeMatche = youtubeRegex.exec(message)
+    const youtubeMatche = message.match(youtubeRegex);
     if (youtubeMatche) {
      // TODO ajouter un attachement de type youtube dans attachements
-      const ytb : MessageYoutubeElement ={
+      const ytb : MessageYoutubeElement = {
         type : "youtube",
         videoId : youtubeMatche[2]
-      }
-      attachements.push(ytb)
+      };
+      attachements.push(ytb);
+
+      youtubeMatche.forEach(link => {
+        message = message.replace(link, `<a href='${link}'>${link}</a>`)
+      });
     }
 
     return {
