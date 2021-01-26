@@ -21,59 +21,69 @@ export class PostMapper {
     const youtubeRegex = /(http[s]?:\/\/)?www\.(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/gmi;
     const attachements: MessageElement[] = [];
 
-    const pictureMatche = message.match(pictureRegex);
+    let pictureMatche = message.match(pictureRegex);
     if (pictureMatche) {
-     // TODO ajouter un attachement de type image dans attachements
-     const picture : MessageImageElement = {
-       url : pictureMatche[0],
-       type : "image"
-      };
-      attachements.push(picture);
-
+      pictureMatche = pictureMatche.filter( this.uniqueValues ) as RegExpMatchArray;
       pictureMatche.forEach(link => {
-        message = message.replace(link, `<a href='${link}'>${link}</a>`)
+        // TODO ajouter un attachement de type image dans attachements
+      const picture : MessageImageElement = {
+        url : link,
+        type : "image"
+        };
+        attachements.push(picture);
       });
     }
 
-    const videoMatche = message.match(videoRegex);
+    let videoMatche = message.match(videoRegex);
     if (videoMatche) {
-     // TODO ajouter un attachement de type video dans attachements
-      const video : MessageVideoElement = {
-        url : videoMatche[0],
-        type : "video"
-      };
-      attachements.push(video);
-
+      videoMatche.filter( this.uniqueValues ) as RegExpMatchArray;
       videoMatche.forEach(link => {
-        message = message.replace(link, `<a href='${link}'>${link}</a>`)
+        // TODO ajouter un attachement de type video dans attachements
+        const video : MessageVideoElement = {
+          url : link,
+          type : "video"
+        };
+        attachements.push(video);
       });
     }
 
-    const audioMatche = message.match(audioRegex);
+    let audioMatche = message.match(audioRegex);
     if (audioMatche) {
-     // TODO ajouter un attachement de type audio dans attachements
-      const audio : MessageAudioElement = {
-        url : audioMatche[0],
-        type : "audio"
-      };
-      attachements.push(audio);
-
+      audioMatche = audioMatche.filter( this.uniqueValues ) as RegExpMatchArray;
       audioMatche.forEach(link => {
-        message = message.replace(link, `<a href='${link}'>${link}</a>`)
+        // TODO ajouter un attachement de type audio dans attachements
+        const audio : MessageAudioElement = {
+          url : link,
+          type : "audio"
+        };
+        attachements.push(audio);
       });
     }
 
-    const youtubeMatche = message.match(youtubeRegex);
+    let youtubeMatche = message.match(youtubeRegex);
     if (youtubeMatche) {
-     // TODO ajouter un attachement de type youtube dans attachements
-      const ytb : MessageYoutubeElement = {
-        type : "youtube",
-        videoId : youtubeMatche[2]
-      };
-      attachements.push(ytb);
-
+      youtubeMatche = youtubeMatche.filter( this.uniqueValues ) as RegExpMatchArray;
+      console.debug(youtubeMatche)
       youtubeMatche.forEach(link => {
-        message = message.replace(link, `<a href='${link}'>${link}</a>`)
+        youtubeRegex.lastIndex = 0;
+        const t = youtubeRegex.exec(link) as RegExpExecArray;
+        // TODO ajouter un attachement de type youtube dans attachements
+        const ytb : MessageYoutubeElement = {
+          type : "youtube",
+          videoId : t[2]
+        };
+        attachements.push(ytb);
+      });
+    }
+
+    let regex: RegExp = new RegExp(/(https|http)(:\/\/)(\w|\S)*/, 'gm');
+    let results = message.match(regex);
+    if (results) {
+      console.debug(results);
+      results = results.filter( this.uniqueValues ) as RegExpMatchArray;
+
+      results.forEach(link => {
+        message = message.split(link).join(`<a href='${link}'>${link}</a>`);
       });
     }
 
@@ -85,4 +95,8 @@ export class PostMapper {
       attachements
     };
   }
+
+  private uniqueValues (value: any, index: number, array: Array<any>) {
+    return array.indexOf(value) === index;
+  };
 }
