@@ -65,14 +65,18 @@ export class PostMapper {
 
     const youtubeMatche = message.match(youtubeRegex);
     if (youtubeMatche) {
-     // TODO ajouter un attachement de type youtube dans attachements
+    youtubeMatche.forEach(link => {
+      youtubeRegex.lastIndex = 0;
+      console.debug(link);
+      const t = youtubeRegex.exec(link) as RegExpExecArray;
+      console.debug(t);
+      // TODO ajouter un attachement de type youtube dans attachements
       const ytb : MessageYoutubeElement = {
         type : "youtube",
-        videoId : youtubeMatche[2]
+        videoId : t[2]
       };
       attachements.push(ytb);
 
-      youtubeMatche.forEach(link => {
         message = message.replace(link, `<a href='${link}'>${link}</a>`)
       });
     }
