@@ -79,8 +79,7 @@ export class UserRegistrationComponent implements OnInit {
     };
   };
 
-  //CODE MADE BY MELVIN DELPIERRE JE NE SUIS PAS REPONSPONSABLE DE CA -Dan
-  // Et j'en suis fier 💩 - Melvin
+  //💩💩💩💩💩💩💩💩💩💩💩💩💩
   private validateUsername(control: AbstractControl): ValidationErrors | null {
     this._userService.exist(control.value).then( result => {
       if (result === true) {
@@ -89,5 +88,5 @@ export class UserRegistrationComponent implements OnInit {
     } );
     return null;
   }
-
+  //🤢🤢🤢🤢🤢🤢🤢🤢🤢🤢🤢🤢🤢
 }

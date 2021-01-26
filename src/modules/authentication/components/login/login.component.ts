@@ -53,7 +53,8 @@ export class LoginComponent implements OnInit {
       if(authenticate.success){
         this.router.navigate(["/"]);
       }else{
-        this.nzMessageService.error(authenticate.reason);
+        // this.nzMessageService.error(authenticate.reason);
+        this.nzMessageService.error("Le nom ou le mot de passe de l'utilisateur est incorrect");
       }
 
     } catch (e) {
