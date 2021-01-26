@@ -22,6 +22,7 @@ export class FeedInputComponent {
   message: string = "";
 
   users: User[] = [];
+  searchMode: boolean;
 
   /**
    * Staging file to upload
@@ -41,8 +42,8 @@ export class FeedInputComponent {
    * @param user The mentioned user
    */
   chooseMention(user: User) {
-    if (this.currentMention) {
-      this.message = this.message.substr(0, this.currentMention.index! + 1) + user.username + this.message.substr(this.currentMention.index! + this.currentMention[1].length + 1) + " ";
+    if (this.currentMention && this.currentMention.input) {
+      this.message = this.message.substr(0, this.currentMention.index!) + user.username + this.message.substr(this.currentMention.index! + this.currentMention[1].length + 1) + " ";
     }
     this.hideMentionList();
   }
@@ -63,6 +64,7 @@ export class FeedInputComponent {
   hideMentionList() {
     this.inputPopover.hide();
     this.currentMention = undefined;
+    this.searchMode = false;
   }
 
 
@@ -94,7 +96,7 @@ export class FeedInputComponent {
    * InputKeyDown event handler. Used to watch "Enter" key press
    * @param e
    */
-  onInputKeyDown(e: KeyboardEvent) {
+  async onInputKeyDown(e: KeyboardEvent) {
     // True if "Enter" is pressed without th shift or CTRL key pressed
     if (e.key.toLowerCase() === "enter" && !e.shiftKey && !e.ctrlKey) {
       e.stopImmediatePropagation();
@@ -103,13 +105,40 @@ export class FeedInputComponent {
 
       this.send();
     }
+
+    if (e.key === "@") {
+      this.searchMode = true
+    }
+
+    if (e.key === " " && this.searchMode) {
+      this.hideMentionList();
+    }
+
   }
 
   /**
    * InputKeyUp event handler. Use to watch arrows key press to know when to show mention list
    * @param e
    */
-  onInputKeyUp(e: KeyboardEvent) {
+  async onInputKeyUp(e: KeyboardEvent | any)  {
+
+    if(this.message){
+      const message = this.message.substring(0,e.target.selectionStart)
+      const tab = message.split(" ");
+      this.searchMode = tab[tab.length -1].indexOf("@") === 0;
+    }
+
+    if (this.searchMode) {
+      const regexp = /([^@/]*)$/gm;
+      const regExpMatchArray = regexp.exec(this.message.substring(0,e.target.selectionStart));
+      if (regExpMatchArray) {
+        await this.searchMentionedUsers(regExpMatchArray[0]);
+        this.showMentionList(regExpMatchArray);
+      }
+    } else {
+      this.hideMentionList();
+    }
+
 
   }
 
@@ -150,7 +179,6 @@ export class FeedInputComponent {
       message: this.message,
       file: this.file || undefined
     }
-    console.log(message);
     this.messageSent.emit(message);
   }
 

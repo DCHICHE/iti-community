@@ -9,7 +9,7 @@
     <textarea (keydown)="onInputKeyDown($event)" (keyup)="onInputKeyUp($event)" nz-input nzAutosize class="ant-input"
       name="message" #input nz-popover nzPopoverPlacement="topLeft" [nzPopoverContent]="contentTemplate"
       [nzPopoverTrigger]="null" placeholder="Rédigez un nouveau message" [ngModel]="message"
-      (ngModelChange)="onMessageChanged($event)"></textarea>
+      (ngModelChange)="onMessageChanged($event)" (click)="onInputKeyUp($event)"></textarea>
   </form>
   <button nz-button nzType="primary" (click)="send()" [disabled]="!message && !file">Send</button>
 </div>
