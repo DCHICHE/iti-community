@@ -38,11 +38,11 @@ export class PostComponent implements OnInit, AfterViewInit {
     let message = this.post.message.text.content;
     var searchUsernames = message.match(/(?<=\s|^)((@)(\w)+)/g);
     if (searchUsernames) {
-      var a = searchUsernames.filter((value: any, index: number, array: Array<any>) => {
+      var uniqueUsernames = searchUsernames.filter((value: any, index: number, array: Array<any>) => {
         return array.indexOf(value) === index;
       });
 
-      a.forEach(userName=>{
+      uniqueUsernames.forEach(userName=>{
         message = message.split(userName).join(`<span class="post-mention"> ${userName.split("@")[1]} </span>`);
       })
     }
