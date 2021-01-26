@@ -25,7 +25,6 @@ export class FeedComponent implements OnInit {
     this.roomId$.subscribe({
       next: async (roomId) => {
         if (roomId) {
-          console.log(roomId)
           await this.postService.fetch(roomId, {
             page: 0,
             perPage: 50
