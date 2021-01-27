@@ -1,6 +1,6 @@
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, AbstractControl, ValidationErrors, Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { User } from '../../user.model';
 
@@ -54,17 +54,23 @@ export class UserProfileModalComponent implements OnInit {
   @Input()
   user: User;
 
-  @ViewChild("f")
-  form: NgForm;
+  // @ViewChild("f")
+  // form: NgForm;
   supportedTypes = "";
   isVisible: boolean = false;
+  userNameExists: boolean = false;
+  public form: FormGroup;
   model: UserProfileForm;
 
-  constructor(private userService: UserService, private sanitizer: DomSanitizer) {
+  constructor(private userService: UserService, private sanitizer: DomSanitizer, private formBuilder: FormBuilder) {
+
   }
 
   ngOnInit(): void {
     this.model = new UserProfileForm(this.user);
+    this.form = this.formBuilder.group({
+      username: [this.model.username, [Validators.required, this.validateUsername.bind(this)]]
+    });
   }
 
   get photoUrl(): SafeResourceUrl {
@@ -73,11 +79,10 @@ export class UserProfileModalComponent implements OnInit {
 
   async onOk() {
     // DONE vérifier si le formulaire est valide
-    if (!this.model.username) return
-
+    if (this.form.invalid) return
     if (this.model.hasChanged()) {
       // DONE mettre à jour l'utilisateur via le service
-      this.userService.update({id: this.model.id, username: this.model.username, photo: this.model.file});
+      await this.userService.update({id: this.user.id, username: this.form.value.username, photo: this.model.file});
     }
 
     this.close();
@@ -93,12 +98,23 @@ export class UserProfileModalComponent implements OnInit {
   }
 
   open() {
-    this.model = new UserProfileForm(this.user);
-    this.form.resetForm(this.model);
+    this.form.reset({username: this.user.username});
     this.isVisible = true;
   }
 
   close() {
     this.isVisible = false;
   }
+
+  private validateUsername(control: AbstractControl): ValidationErrors | null {
+    if (control.value.length > 0 && control.value !== this.user.username) {
+      this.userService.exist(control.value).then( (result: boolean) => {
+        if (result === true) {
+          control.setErrors( {'usernameAlreadyExists': true});
+        }
+      } );
+    }
+    return null;
+  }
+
 }

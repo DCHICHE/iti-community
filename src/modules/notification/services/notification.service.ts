@@ -11,6 +11,10 @@ export class NotificationService {
     private notificationCommands: NotificationCommands
 
   ) {
+    window.addEventListener('load', function () {
+      Notification.requestPermission(function (status) {
+      });
+    });
   }
 
   async fetch() {

@@ -37,18 +37,12 @@ export class UserWidgetComponent implements OnInit {
     private store: UserStore
   ) {
     this.user$ = store.user$;
-    this.user$.subscribe((usr: any) => this.currentUser = usr);
     this.photoUrl$ = store.get(s => s.user && s.user.photoUrl ? s.user.photoUrl : "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Unknown_person.jpg/434px-Unknown_person.jpg");
     this.hasUnread$ = notificationStore.hasUnread$;
   }
 
   ngOnInit(): void {
-    if (this.currentUser?.photoUrl) {
-      const element = document.getElementsByClassName('user-widget-photo');
-      if (element) {
-        element[0].setAttribute("style",'background-image:url(' + this.currentUser.photoUrl + ')')
-      }
-    }
+
   }
 
   fireToggleNotificaions() {

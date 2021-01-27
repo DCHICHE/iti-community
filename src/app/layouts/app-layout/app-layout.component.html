@@ -1,6 +1,6 @@
 <div class="app-layout">
   <div class="panel-drawer" [ngClass]="{opened: showDrawer}">
-    <app-notification *ngFor="let notif of notificationsList" [notification]="notif"></app-notification>
+    <app-notification *ngFor="let notif of notificationsList.reverse()" [notification]="notif"></app-notification>
   </div>
   <div class="app-layout-panel-left">
     <div class="panel-head">

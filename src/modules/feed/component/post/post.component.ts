@@ -16,7 +16,7 @@ export class PostComponent implements OnInit, AfterViewInit {
   postData: PostData
 
   public get dateZone() {
-    return DateTime.fromMillis( parseInt(this.post.createdAt), { zone: 'local' }).toString();
+    return DateTime.fromMillis(parseInt(this.post.createdAt), { zone: 'local' }).toString();
   }
 
   @ViewChild("anchor")
@@ -42,7 +42,7 @@ export class PostComponent implements OnInit, AfterViewInit {
         return array.indexOf(value) === index;
       });
 
-      uniqueUsernames.forEach(userName=>{
+      uniqueUsernames.forEach(userName => {
         message = message.split(userName).join(`<span class="post-mention"> ${userName.split("@")[1]} </span>`);
       })
     }
@@ -52,9 +52,10 @@ export class PostComponent implements OnInit, AfterViewInit {
 
   }
 
-
   async like() {
-    this.postService.like(this.post);
-    this.post.liked = true;
+    if (!this.post.liked) {
+      this.postService.like(this.post);
+      this.post.liked = true;
+    }
   }
 }

@@ -30,8 +30,8 @@ export class PostService {
         });
     }
 
-    like(post: Post) {
+    async like(post: Post) {
       // TODO appeler la méthode like sur PostCommands
-      this.commands.like(post.roomId,post.id);
+      await this.commands.like(post.roomId,post.id);
     }
 }

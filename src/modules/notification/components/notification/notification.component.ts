@@ -14,11 +14,10 @@ export class NotificationComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-
+    console.log();
   }
 
   public get dateZone() {
-    console.log()
     return DateTime.fromMillis(this.notification.timestamp, { zone: 'local' }).toString();
   }
 
