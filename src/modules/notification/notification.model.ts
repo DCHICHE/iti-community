@@ -2,24 +2,32 @@ import { Room } from "../room/room.model";
 import { User } from "../user/user.model";
 
 export type NotificationSubject =
-    | 'post_liked'
-    | 'room_created';
+  | 'post_liked'
+  | 'room_added'
+  | 'new_user';
 
 export interface AppNotification<TSubject extends NotificationSubject, TData extends object> {
-    timestamp: number;
-    subject: TSubject;
-    unread: boolean;
-    data: TData;
+  id: string;
+  viewedAt?: number;
+  timestamp: number;
+  subject: TSubject;
+  payload: TData;
 }
 
-export type NewRoomNotification = AppNotification<'room_created', {
-    user: User;
-    room: Room;
+export type RoomAddedNotification = AppNotification<'room_added', {
+  user: User;
+  room: Room;
 }>;
 
 export type PostLikedNotification = AppNotification<'post_liked', {
-    user: User;
-    postId: string;
+  user: User;
+  postId: string;
+  preview: string;
 }>
 
-export type AnyNotification = NewRoomNotification | PostLikedNotification;
+export type NewUserNotification = AppNotification<'new_user', {
+  username: string;
+}>;
+
+
+export type AnyNotification = RoomAddedNotification | PostLikedNotification | NewUserNotification;

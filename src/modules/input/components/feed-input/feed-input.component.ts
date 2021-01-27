@@ -42,7 +42,7 @@ export class FeedInputComponent {
    * @param user The mentioned user
    */
   chooseMention(user: User) {
-    if (this.currentMention && this.currentMention.input) {
+    if (this.currentMention) {
       this.message = this.message.substr(0, this.currentMention.index!) + user.username + this.message.substr(this.currentMention.index! + this.currentMention[1].length + 1) + " ";
     }
     this.hideMentionList();

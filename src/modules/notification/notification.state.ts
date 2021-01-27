@@ -1,3 +1,5 @@
+import { AnyNotification } from "./notification.model";
+
 export interface NotificationState {
-    unread: number;
+  notifications: AnyNotification[];
 }
