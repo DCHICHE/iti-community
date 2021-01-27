@@ -4,7 +4,7 @@ export class PostMapper {
   map(data: PostData): Post {
     return {
       ...data,
-      message: this.parseMessage(data.message)
+      message: this.parseMessage(`${data.message} ${data.attachementUrl ? data.attachementUrl : ''}`)
     }
   }
 

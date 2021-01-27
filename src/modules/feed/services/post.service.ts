@@ -17,17 +17,7 @@ export class PostService {
     }
 
     async create(roomId: string, message: string, file?: File): Promise<PostData> {
-        const post = await this.commands.create(roomId, message, file);
-        return {
-            id: post.id,
-            likes: 0,
-            roomId,
-            comments: [],
-            createdAt: new Date().toISOString(),
-            createdBy: this.userStore.value.user!,
-            liked: false,
-            message
-        }
+        return  this.commands.create(roomId, message, file);
     }
 
     async fetch(roomId: string, page: PageModel): Promise<void> {

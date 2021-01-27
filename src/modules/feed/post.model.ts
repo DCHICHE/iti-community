@@ -8,7 +8,7 @@ export interface PostBase {
     roomId: string,
     createdAt: string;
     createdBy: User;
-    comments: any[];
+    attachementUrl?: string;
 }
 
 /**

@@ -12,13 +12,11 @@ import { SocketIoWebsocketConnection } from 'src/modules/common/SocketIoWebsocke
 })
 export class RoomPageComponent implements OnInit {
   roomId$: Observable<string>;
-  connection: SocketIoWebsocketConnection<any>;
   constructor(private route: ActivatedRoute, private feedStore: FeedStore) {
 
   }
 
   ngOnInit(): void {
-    this.connection = new SocketIoWebsocketConnection('localhost');
     this.roomId$ = this.route.params.pipe(map(p => p.roomId));
     this.roomId$.subscribe({
       next: (roomId) => {

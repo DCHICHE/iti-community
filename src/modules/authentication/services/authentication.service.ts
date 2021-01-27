@@ -20,9 +20,9 @@ export class AuthenticationService {
         this.store.mutate(s => {
             return {
                 ...s,
-                userId: loginResult.value.userId,
-                accessToken: loginResult.value.accessToken,
-                expiresAt: loginResult.value.expiresAt
+                userId: loginResult.value.user.id,
+                accessToken: loginResult.value.bearer.token,
+                expiresAt: loginResult.value.bearer.expiresAt
             }
         });
 

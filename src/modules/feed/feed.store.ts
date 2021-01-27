@@ -1,22 +1,40 @@
-import { Observable, BehaviorSubject } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, pairwise } from 'rxjs/operators';
 import { Store } from '../common/Store';
 import { FeedState } from './feed.state';
-import { SocketIoWebsocketConnection } from '../common/SocketIoWebsocketConnection';
+import { Post } from './post.model';
 
 export class FeedStore extends Store<FeedState> {
-    roomId$: Observable<string | undefined>;
+  roomId$: Observable<string | undefined>;
+  constructor() {
+    super({
+      posts: []
+    });
+    this.roomId$ = this.get(s => s.roomId).pipe(distinctUntilChanged());
+  }
 
-    private _webSocketConnection: BehaviorSubject<SocketIoWebsocketConnection<any> | null>;
-    webSocketConnection$: Observable<SocketIoWebsocketConnection<any> | null>;
-    constructor() {
-        super({
-            posts: []
-        });
-        this.roomId$ = this.get(s => s.roomId).pipe(distinctUntilChanged());
+  appendPost(...posts: Post[]) {
+    this.mutate(s => {
+      return {
+        ...s,
+        posts: [...s.posts, ...posts]
+      }
+    });
+  }
 
-        this._webSocketConnection = new BehaviorSubject<SocketIoWebsocketConnection<any> | null>(null);
-        this.webSocketConnection$ = this._webSocketConnection.asObservable();
-        this._webSocketConnection.next( new SocketIoWebsocketConnection<any>('localhost'));
-    }
+  prependPost(...posts: Post[]) {
+    this.mutate(s => {
+      return {
+        ...s,
+        posts: [...posts, ...s.posts,]
+      }
+    });
+  }
+
+  onRoomIdChange(callback: (roomId: string | undefined) => any) {
+    this.roomId$.pipe(
+    ).subscribe(roomId => {
+      callback(roomId);
+    });
+  }
 }

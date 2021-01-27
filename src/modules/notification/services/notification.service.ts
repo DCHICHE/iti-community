@@ -1,27 +1,31 @@
 import { Injectable } from "@angular/core";
 import { NotificationStore } from "../notification.store";
-import { NotificationQueries } from './notification.queries';
-import { AnyNotification } from '../notification.model';
+import { NotificationCommands } from "./notification.commands";
+import { NotificationQueries } from "./notification.queries";
 
 @Injectable()
 export class NotificationService {
-    constructor(
-      private store: NotificationStore,
-      private notificationQueries: NotificationQueries
-      ) {
+  constructor(
+    private store: NotificationStore,
+    private notificationQueries: NotificationQueries,
+    private notificationCommands: NotificationCommands
 
-    }
+  ) {
+  }
 
-    async getNotifications() : Promise<AnyNotification[]>{
-      return this.notificationQueries.getNotifications()
-    }
+  async fetch() {
+    const notifications = await this.notificationQueries.getNotifications();
+    this.store.mutate(s => {
+      return {
+        ...s,
+        notifications
+      }
+    });
+  }
 
-    markAsViewed() {
-        this.store.mutate(s => {
-            return {
-                ...s,
-                unread: 0
-            };
-        });
-    }
+  async markAsViewed() {
+    await this.notificationCommands.view();
+    await this.fetch();
+  }
+
 }
