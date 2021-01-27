@@ -16,11 +16,11 @@ export class NotificationSocketService {
           return;
         }
 
-        this.socketTopic.unsubscribe(`notifications_${this.subscription[0]}`, this.subscription[1]);
+        this.unsubscribe(this.subscription[0], this.subscription[1]);
 
         if (userId) {
           this.subscription[0] = userId;
-          this.socketTopic.subscribe(`notifications_${this.subscription[0]}`, this.subscription[1]);
+          this.subscribe(this.subscription[0], this.subscription[1]);
         }
       });
   }
@@ -31,10 +31,20 @@ export class NotificationSocketService {
     }
 
     if (this.subscription) {
-      this.socketTopic.unsubscribe(`notifications_${this.subscription[0]}`, this.subscription[1]);
+      this.unsubscribe(this.subscription[0], this.subscription[1]);
     }
     const userId = this.authStore.value.userId;
+    this.subscribe(userId, callback);
+  }
+
+  private subscribe(userId: string, callback: (notif: AnyNotification) => any) {
     this.subscription = [userId, callback];
     this.socketTopic.subscribe(`notifications_${userId}`, callback);
+    this.socketTopic.subscribe(`notifications`, callback);
+  }
+
+  private unsubscribe(userId: string, callback: (notif: AnyNotification) => any) {
+    this.socketTopic.unsubscribe(`notifications_${userId}`, callback);
+    this.socketTopic.unsubscribe(`notifications`, callback);
   }
 }

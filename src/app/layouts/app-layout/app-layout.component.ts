@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { NotificationService } from 'src/modules/notification/services/notification.service';
 import { AnyNotification } from 'src/modules/notification/notification.model';
 import { AuthenticationStore } from 'src/modules/authentication/authentication.store';
@@ -6,14 +6,15 @@ import { WebsocketConnection } from 'src/modules/common/WebsocketConnection';
 import { NotificationStore } from 'src/modules/notification/notification.store';
 import { NotificationSocketService } from 'src/modules/notification/services/notification.socket.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-app-layout',
   templateUrl: './app-layout.component.html',
   styleUrls: ['./app-layout.component.less']
 })
-export class AppLayoutComponent implements OnInit {
-
+export class AppLayoutComponent implements OnInit, OnDestroy {
+  sub?: Subscription;
 
   notificationsList: AnyNotification[];
   showDrawer: boolean = false;
@@ -30,7 +31,6 @@ export class AppLayoutComponent implements OnInit {
     })
 
     this.notificationSocketService.onNewNotification(notif => {
-      console.log(notif);
       var notifTitle = "";
       if (notif.subject === "post_liked") {
         notifTitle = notif.payload.user.username + " a liké votre post :"
@@ -45,14 +45,14 @@ export class AppLayoutComponent implements OnInit {
           notif.payload.room.name
         )
       } else if (notif.subject === "new_user") {
-        notifTitle = notif.payload.username + "join the battle ! "
+        notifTitle = notif.payload.user.username + "join the battle ! "
         this.nzNotificationService.info(
           notifTitle,
           "")
       }
 
       if (document.visibilityState === 'hidden') {
-        var n = new Notification(notifTitle);
+        new Notification(notifTitle);
       }
 
       this.store.appendNotification(notif);
@@ -60,9 +60,9 @@ export class AppLayoutComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.authStore.value$.subscribe(s => {
-      if (s) {
-        this.socket.connect(s.accessToken);
+    this.sub = this.authStore.accessToken$.subscribe(accessToken => {
+      if (accessToken) {
+        this.socket.connect(accessToken);
       } else {
         this.socket.disconnect();
       }
@@ -71,6 +71,12 @@ export class AppLayoutComponent implements OnInit {
     await this.notificationService.fetch();
   }
 
+
+  ngOnDestroy() {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
+  }
   async onToggleNotifications() {
     this.showDrawer = !this.showDrawer;
     if (!this.showDrawer) {

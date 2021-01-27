@@ -6,6 +6,8 @@ import { Post } from './post.model';
 
 export class FeedStore extends Store<FeedState> {
   roomId$: Observable<string | undefined>;
+  registrations: Set<(roomId: string | undefined) => any> = new Set();
+
   constructor() {
     super({
       posts: []
@@ -32,6 +34,11 @@ export class FeedStore extends Store<FeedState> {
   }
 
   onRoomIdChange(callback: (roomId: string | undefined) => any) {
+    if (this.registrations.has(callback)) {
+      return;
+    }
+
+    this.registrations.add(callback);
     this.roomId$.pipe(
     ).subscribe(roomId => {
       callback(roomId);

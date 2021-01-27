@@ -27,7 +27,9 @@ export class RoomMenuComponent implements OnInit {
     this.roomId$ = feedStore.roomId$;
     this.roomStore.value$.subscribe(state => this.rooms = state.rooms);
     this.roomSocketService.onNewRoom(room => {
+      console.log(room);
       this.roomStore.appendRoom(room);
+      console.log(this.roomStore.value)
     })
   }
 

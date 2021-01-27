@@ -28,6 +28,7 @@ export class LocalPostCommands extends PostCommands {
     return post;
   }
 
+
   async like(roomId: string, postId: string): Promise<void> {
     const posts = this.storage.getValue();
     posts[roomId] = posts[roomId] || [];
@@ -36,7 +37,6 @@ export class LocalPostCommands extends PostCommands {
     if (!post) {
       throw Error("Post not found");
     }
-
 
     post.liked = true;
     this.storage.setValue(posts);

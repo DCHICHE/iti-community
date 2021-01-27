@@ -22,7 +22,6 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
   imports: [
     CommonModule,
     NzMessageModule
-
   ],
   declarations: [NotificationComponent],
   exports: [NotificationComponent]
