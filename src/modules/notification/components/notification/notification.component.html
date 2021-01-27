@@ -1,8 +1,10 @@
-<div class="notification-author-photo" [ngStyle]="{'background-image': 'url(' + notification.data.user.photoUrl + ')'}">
-</div>
-{{notification.data.user.username}}
+<div  [ngStyle]="{'background-color': notification.unread ? 'green' : 'white'}">
+  <div class="notification-author-photo"
+    [ngStyle]="{'background-image': 'url(' + notification.data.user.photoUrl + ')'}"></div>
+  {{notification.data.user.username}}
 
-<span *ngIf="notification.subject === 'post_liked'"> a aimé votre post</span>
-<span *ngIf="notification.subject === 'room_created'"> a crée une salle</span>
-le {{dateZone | date:'dd-MM-yyyy HH:mm:ss'}}
-<hr>
+  <span *ngIf="notification.subject === 'post_liked'"> a aimé votre post</span>
+  <span *ngIf="notification.subject === 'room_created'"> a crée une salle</span>
+  le {{dateZone | date:'dd-MM-yyyy HH:mm:ss'}}
+  <hr>
+</div>
