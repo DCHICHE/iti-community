@@ -19,8 +19,8 @@ export class NotificationComponent implements OnInit {
   }
 
   public get dateZone() {
-    console.log(DateTime.fromISO(this.notification.timestamp.toString(), { zone: 'local' }).toString())
-    return DateTime.fromISO(this.notification.timestamp.toString(), { zone: 'local' }).toString();
+    console.log()
+    return DateTime.fromMillis(this.notification.timestamp, { zone: 'local' }).toString();
   }
 
 }
