@@ -14,7 +14,6 @@ export class NotificationComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.notification.data.user.photoUrl)
 
   }
 

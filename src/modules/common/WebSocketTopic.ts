@@ -1,24 +1,27 @@
-import { Observable, Subject } from 'rxjs';
-import { share } from 'rxjs/operators';
-import { Socket } from 'socket.io-client';
+import { Injectable } from '@angular/core';
+import { WebsocketConnection } from './WebsocketConnection';
 
-export class WebSocketTopic<T> {
-    public readonly topic: string;
-    public readonly message$: Observable<T>;
+@Injectable()
+export class WebSocketTopic {
+  constructor(private cnx: WebsocketConnection) {
+  }
 
-    private readonly _subject: Subject<T>;
+  subscribe(topic: string, handler: (...args: any[]) => any) {
+    this.cnx.emit("subscribe", {
+      topic
+    });
+    this.cnx.on(topic, handler);
+    this.cnx.on("connect", () => {
+      this.cnx.emit("subscribe", {
+        topic
+      });
+    });
+  }
 
-    constructor(topic: string, io: Socket) {
-        this.topic = topic;
-        this._subject = new Subject<T>();
-        this.message$ = this._subject.asObservable().pipe(share());
-        
-        io.on(topic, (messsage: T) => {
-            this.publish(messsage);
-        });
-    }
-
-    protected publish(message: T) {
-        this._subject.next(message);
-    }
+  unsubscribe(topic: string, handler: (...args: any[]) => any) {
+    this.cnx.emit("unsubscribe", {
+      topic
+    });
+    this.cnx.off(topic, handler);
+  }
 }

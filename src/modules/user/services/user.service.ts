@@ -45,7 +45,6 @@ export class UserService {
   }
 
   exist(username : string) : Promise<boolean>{
-    console.debug('t')
-    return this.queries.exists(username)
+    return this.queries.exists(username.toLowerCase());
   }
 }

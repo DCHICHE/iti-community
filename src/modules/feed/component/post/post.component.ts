@@ -16,7 +16,7 @@ export class PostComponent implements OnInit, AfterViewInit {
   postData: PostData
 
   public get dateZone() {
-    return DateTime.fromISO(this.post.createdAt as string, { zone: 'local' }).toString();
+    return DateTime.fromMillis( parseInt(this.post.createdAt), { zone: 'local' }).toString();
   }
 
   @ViewChild("anchor")

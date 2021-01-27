@@ -16,8 +16,9 @@ import { LocalUserQueries } from './services/platform/local/user.queries.local';
 import { UserStore } from './user.store';
 import { UserCommands } from './services/user.commands';
 import { LocalUserCommands } from './services/platform/local/user.commands.local';
-
-
+import { HttpUserQueries } from './services/platform/http/user.queries.http';
+import { HttpUserCommands } from './services/platform/http/user.commands.http';
+import { NotificationModule } from '../notification/notification.module';
 
 @NgModule({
   declarations: [UserRegistrationComponent, UserWidgetComponent, UserProfileModalComponent],
@@ -27,11 +28,11 @@ import { LocalUserCommands } from './services/platform/local/user.commands.local
     UserStore,
     {
       provide: UserQueries,
-      useClass: LocalUserQueries
+      useClass: HttpUserQueries
     },
     {
       provide: UserCommands,
-      useClass: LocalUserCommands
+      useClass: HttpUserCommands
     }
   ],
   imports: [
@@ -43,7 +44,8 @@ import { LocalUserCommands } from './services/platform/local/user.commands.local
     NzIconModule,
     NzModalModule,
     NzBadgeModule,
-    NzUploadModule
+    NzUploadModule,
+    NotificationModule
   ]
 })
 export class UserModule { }

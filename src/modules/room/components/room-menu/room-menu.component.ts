@@ -9,6 +9,7 @@ import { RoomService } from '../../services/room.service';
 import { RoomCreateModalComponent } from '../room-create-modal/room-create-modal.component';
 import { RoomState } from '../../room.state';
 
+import { RoomSocketService } from '../../services/room.socket.service';
 @Component({
   selector: 'app-room-menu',
   templateUrl: './room-menu.component.html',
@@ -22,7 +23,7 @@ export class RoomMenuComponent implements OnInit {
 
   rooms: Room[];
 
-  constructor(private feedStore: FeedStore, private queries: RoomQueries, private roomService: RoomService, private router: Router, private roomStore: RoomStore) {
+  constructor(private feedStore: FeedStore, private queries: RoomQueries, private roomSocketService: RoomSocketService, private router: Router, private roomStore: RoomStore) {
     this.roomId$ = feedStore.roomId$;
     this.roomStore.value$.subscribe(state => this.rooms =  state.rooms);
   }

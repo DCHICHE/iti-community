@@ -67,10 +67,8 @@ export class UserProfileModalComponent implements OnInit {
     this.model = new UserProfileForm(this.user);
   }
 
-  get photoUrl(): SafeResourceUrl | undefined {
-    if (this.model.photoUrl) {
-      return this.sanitizer.bypassSecurityTrustResourceUrl(this.model.photoUrl);
-    }
+  get photoUrl(): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(this.model.photoUrl || "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Unknown_person.jpg/434px-Unknown_person.jpg");
   }
 
   async onOk() {

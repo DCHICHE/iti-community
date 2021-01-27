@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { FeedStore } from '../../feed.store';
 import { Post } from '../../post.model';
 import { PostService } from '../../services/post.service';
-
+import { FeedSocketService } from '../../services/feed.socket.service';
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
@@ -16,20 +16,24 @@ export class FeedComponent implements OnInit {
 
   posts$: Observable<Post[]>;
 
-  constructor(private postService: PostService, private store: FeedStore) {
+  constructor(private postService: PostService,
+    private store: FeedStore,
+    private socketService: FeedSocketService,) {
     this.posts$ = this.store.get(s => s.posts);
     this.roomId$ = this.store.roomId$;
   }
 
   async ngOnInit() {
-    this.roomId$.subscribe({
-      next: async (roomId) => {
-        if (roomId) {
-          await this.postService.fetch(roomId, {
-            page: 0,
-            perPage: 50
-          });
-        }
+    this.store.onRoomIdChange(async roomId => {
+      if (roomId) {
+        this.socketService.onNewPost(roomId, post => {
+          // if(post.createdBy.)
+          this.store.appendPost(post);
+        })
+        await this.postService.fetch(roomId, {
+          page: 0,
+          perPage: 10000
+        });
       }
     })
   }

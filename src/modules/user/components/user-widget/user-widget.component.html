@@ -1,9 +1,8 @@
 <div class="user-widget">
-  <div class="user-widget-photo" >
-  </div>
+  <div class="user-widget-photo"  *ngIf="photoUrl$ | async as photoUrl" [ngStyle]="{'background-image': 'url('+ photoUrl +')'}"></div>
   <div class="user-widget-actions">
     <button nz-button nzType="default" nzGhost (click)="modal.open()"><i nz-icon nzType="edit"></i></button>
-    <nz-badge nzDot>
+    <nz-badge [nzDot]="hasUnread$ | async">
       <button nz-button nzType="default" nzGhost (click)="fireToggleNotificaions()"> <i nz-icon nzType="bell"
           nzTheme="outline"></i></button>
     </nz-badge>

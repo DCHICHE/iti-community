@@ -5,28 +5,30 @@ import { AuthenticationCommands, LoginCommandResult, LogoutCommandResult } from 
 
 @Injectable()
 export class LocalAuthenticationCommands extends AuthenticationCommands {
-    private userStorage: UserLocalStorage = new UserLocalStorage();
+  private userStorage: UserLocalStorage = new UserLocalStorage();
 
-    async login(username: string, password: string): Promise<LoginCommandResult> {
-        const users = this.userStorage.getValue();
-        const userId = Object.keys(users).find(id => users[id].username === username);
-        if (!userId) {
-            return Bad("invalid_credentials");
-        }
-
-        const user = users[userId];
-        if (user.password !== password) {
-            return Bad("invalid_credentials");
-        }
-
-        return Ok({
-            userId: user.id,
-            accessToken: "token",
-            expiresAt: 0
-        });
+  async login(username: string, password: string): Promise<LoginCommandResult> {
+    const users = this.userStorage.getValue();
+    const userId = Object.keys(users).find(id => users[id].username === username);
+    if (!userId) {
+      return Bad("invalid_credentials");
     }
 
-    async logout(userId: string): Promise<LogoutCommandResult> {
-        return Ok();
+    const user = users[userId];
+    if (user.password !== password) {
+      return Bad("invalid_credentials");
     }
+
+    return Ok({
+      user,
+      bearer: {
+        token: "token",
+        expiresAt: 0
+      }
+    });
+  }
+
+  async logout(userId: string): Promise<LogoutCommandResult> {
+    return Ok();
+  }
 }
