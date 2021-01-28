@@ -1,7 +1,8 @@
-import { Component, Input, OnInit, AfterViewInit, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, ViewChild, ElementRef, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { Post, PostData } from '../../post.model';
 import { PostService } from '../../services/post.service';
 import { DateTime } from 'luxon';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-post',
@@ -9,11 +10,13 @@ import { DateTime } from 'luxon';
   styleUrls: ['./post.component.less'],
   encapsulation: ViewEncapsulation.None
 })
-export class PostComponent implements OnInit, AfterViewInit {
+export class PostComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input()
   post: Post;
 
   postData: PostData
+
+  private subscription: Subscription | null;
 
   public get dateZone() {
     return DateTime.fromMillis(parseInt(this.post.createdAt), { zone: 'local' }).toString();
@@ -24,7 +27,9 @@ export class PostComponent implements OnInit, AfterViewInit {
 
   constructor(
     private postService: PostService,
-  ) { }
+  ) {
+
+  }
 
   async ngOnInit() {
     this.post.message.text.content = this.getMessage();
@@ -32,6 +37,27 @@ export class PostComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.anchor.nativeElement.scrollIntoView();
+    this.subscription = this.postService.hasIdToRedirect.subscribe(id => {
+      if (this.post.id === id) {
+        var element = document.getElementById(this.post.id);
+        element?.style.setProperty("background", "green")
+        element?.scrollIntoView({
+          block: "center",
+          inline: "end",
+        });
+        this.postService.setIdToRedirect(null);
+
+
+        setTimeout(function () {
+          element?.style.setProperty("background", "white");
+        }, 1500);
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.subscription)
+      this.subscription.unsubscribe();
   }
 
   getMessage() {

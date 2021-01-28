@@ -5,6 +5,7 @@ import { NotificationQueries } from "./notification.queries";
 import { NotificationSocketService } from './notification.socket.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router';
+import { PostService } from 'src/modules/feed/services/post.service';
 
 @Injectable()
 export class NotificationService {
@@ -14,7 +15,8 @@ export class NotificationService {
     private notificationCommands: NotificationCommands,
     private notificationSocketService: NotificationSocketService,
     private nzNotificationService: NzNotificationService,
-    private router: Router
+    private router: Router,
+    private postService: PostService
 
   ) {
 
@@ -45,6 +47,9 @@ export class NotificationService {
           window.focus();
           if (notif.subject === "room_added") {
             this.router.navigate(["app", notif.payload.room.id]);
+          } else if (notif.subject === "post_liked") {
+            this.postService.setIdToRedirect(notif.payload.postId);
+            this.router.navigate(["app", notif.payload.roomId]);
           }
         })
       }
