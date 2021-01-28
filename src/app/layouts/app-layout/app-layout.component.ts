@@ -4,8 +4,6 @@ import { AnyNotification } from 'src/modules/notification/notification.model';
 import { AuthenticationStore } from 'src/modules/authentication/authentication.store';
 import { WebsocketConnection } from 'src/modules/common/WebsocketConnection';
 import { NotificationStore } from 'src/modules/notification/notification.store';
-import { NotificationSocketService } from 'src/modules/notification/services/notification.socket.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -22,40 +20,10 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
     private socket: WebsocketConnection,
     private authStore: AuthenticationStore,
     private store: NotificationStore,
-    private notificationService: NotificationService,
-    private notificationSocketService: NotificationSocketService,
-    private nzNotificationService: NzNotificationService
+    private notificationService: NotificationService
   ) {
     this.store.value$.subscribe(o => {
       this.notificationsList = o.notifications;
-    })
-
-    this.notificationSocketService.onNewNotification(notif => {
-      var notifTitle = "";
-      if (notif.subject === "post_liked") {
-        notifTitle = notif.payload.user.username + " a liké votre post :"
-        this.nzNotificationService.info(
-          notifTitle,
-          notif.payload.preview
-        )
-      } else if (notif.subject === "room_added") {
-        notifTitle = notif.payload.user.username + " a ajouté une nouvelle salle : "
-        this.nzNotificationService.info(
-          notifTitle,
-          notif.payload.room.name
-        )
-      } else if (notif.subject === "new_user") {
-        notifTitle = notif.payload.user.username + "join the battle ! "
-        this.nzNotificationService.info(
-          notifTitle,
-          "")
-      }
-
-      if (document.visibilityState === 'hidden') {
-        new Notification(notifTitle);
-      }
-
-      this.store.appendNotification(notif);
     })
   }
 
@@ -67,7 +35,6 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
         this.socket.disconnect();
       }
     });
-
     await this.notificationService.fetch();
   }
 

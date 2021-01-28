@@ -1,4 +1,4 @@
-<div class="notification" [ngStyle]="{'background-color': !notification.viewedAt ? 'green' : 'white'}">
+<div (click)="redirect()" class="notification" [ngStyle]="{'background-color': !notification.viewedAt ? 'green' : 'white'}">
   <div class="notification-author-photo"
     [ngStyle]="{'background-image': 'url(' + notification.payload.user.photoUrl + ')'}">
     <div>
