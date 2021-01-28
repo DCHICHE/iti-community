@@ -73,4 +73,9 @@ export class NotificationService {
     await this.fetch();
   }
 
+  requestPermission(){
+    Notification.requestPermission(function (status) {
+    });
+  }
+
 }

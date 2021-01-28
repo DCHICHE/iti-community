@@ -25,6 +25,9 @@ export class RoomMenuComponent implements OnInit {
 
   constructor(private feedStore: FeedStore, private queries: RoomQueries, private roomSocketService: RoomSocketService, private router: Router, private roomStore: RoomStore) {
     this.roomId$ = feedStore.roomId$;
+    this.roomId$.subscribe(v => {
+      if (v) localStorage.setItem('roomId', v);
+    })
     this.roomStore.value$.subscribe(state => this.rooms = state.rooms);
     this.roomSocketService.onNewRoom(room => {
       this.roomStore.appendRoom(room);
@@ -37,9 +40,11 @@ export class RoomMenuComponent implements OnInit {
       rooms: rooms
     }
     this.roomStore.set(roomState);
-    const roomId = localStorage.getItem('roomId');
-    if (roomId) this.router.navigate(["app", roomId]);
-
+    let roomId = localStorage.getItem('roomId');
+    if (!roomId) {
+      roomId = rooms[0].id;
+    }
+    this.router.navigate(["app", roomId]);
   }
 
   goToRoom(room: Room) {

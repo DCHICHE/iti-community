@@ -3,6 +3,8 @@ import { NgForm, FormBuilder, FormGroup, FormControl, Validators } from '@angula
 import { Router } from '@angular/router';
 import { NzMessageService } from "ng-zorro-antd/message";
 import { AuthenticationService } from '../../services/authentication.service';
+import { NotificationService } from 'src/modules/notification/services/notification.service';
+import { NotificationWebService } from 'src/modules/notification/services/notification.web.service';
 
 class LoginFormModel {
   username = "";
@@ -24,6 +26,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthenticationService,
     private nzMessageService: NzMessageService,
     private formBuilder: FormBuilder,
+    private notificationWebService : NotificationWebService
   ) { }
 
   ngOnInit(): void {
@@ -51,8 +54,8 @@ export class LoginComponent implements OnInit {
       // TODO vérifier le résultat de l'authentification. Rediriger sur "/" en cas de succès ou afficher une erreur en cas d'échec
       var authenticate = await this.authService.authenticate(login.username, login.password);
       if (authenticate.success) {
-        Notification.requestPermission(function (status) {
-        });
+
+        this.notificationWebService.requestPermission();
         this.router.navigate(["/"]);
       } else {
         // this.nzMessageService.error(authenticate.reason);
