@@ -5,7 +5,6 @@ import { NotificationQueries } from "./notification.queries";
 import { NotificationSocketService } from './notification.socket.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router';
-import { AnyNotification } from '../notification.model';
 
 @Injectable()
 export class NotificationService {
@@ -18,10 +17,6 @@ export class NotificationService {
     private router: Router
 
   ) {
-    window.addEventListener('load', function () {
-      Notification.requestPermission(function (status) {
-      });
-    });
 
     this.notificationSocketService.onNewNotification(notif => {
       var notifTitle = "";
@@ -47,9 +42,9 @@ export class NotificationService {
       if (document.visibilityState === 'hidden') {
         var notificationOutWeb = new Notification(notifTitle);
         notificationOutWeb.addEventListener('click', (ev) => {
-          ev.preventDefault();
+          window.focus();
           if (notif.subject === "room_added") {
-            // this.router.navigate(["app", notif.payload.room.id]);
+            this.router.navigate(["app", notif.payload.room.id]);
           }
         })
       }

@@ -37,11 +37,11 @@ export class LoginComponent implements OnInit {
     this.router.navigate(["splash", "register"]);
   }
 
-  submit(login : LoginFormModel) {
+  submit(login: LoginFormModel) {
     this.login(login);
   }
 
-  async login(login : LoginFormModel) {
+  async login(login: LoginFormModel) {
     if (this.ngForm.invalid) {
       return;
     }
@@ -50,9 +50,11 @@ export class LoginComponent implements OnInit {
     try {
       // TODO vérifier le résultat de l'authentification. Rediriger sur "/" en cas de succès ou afficher une erreur en cas d'échec
       var authenticate = await this.authService.authenticate(login.username, login.password);
-      if(authenticate.success){
+      if (authenticate.success) {
+        Notification.requestPermission(function (status) {
+        });
         this.router.navigate(["/"]);
-      }else{
+      } else {
         // this.nzMessageService.error(authenticate.reason);
         this.nzMessageService.error("Le nom ou le mot de passe de l'utilisateur est incorrect");
       }
