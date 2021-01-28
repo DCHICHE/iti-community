@@ -9,9 +9,10 @@ import { NotificationCommands } from './services/notification.commands';
 import { HttpNotificationCommands } from './services/platform/http/notification.commands.http';
 import { NotificationSocketService } from './services/notification.socket.service';
 import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NotificationWebService } from './services/notification.web.service';
 
 @NgModule({
-  providers: [NotificationStore, NotificationService,
+  providers: [NotificationStore, NotificationService,NotificationWebService,
     {
       provide: NotificationQueries,
       useClass: HttpNotificationQueries
@@ -22,7 +23,6 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
   imports: [
     CommonModule,
     NzMessageModule
-
   ],
   declarations: [NotificationComponent],
   exports: [NotificationComponent]

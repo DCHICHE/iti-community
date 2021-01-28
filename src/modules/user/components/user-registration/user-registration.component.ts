@@ -81,11 +81,13 @@ export class UserRegistrationComponent implements OnInit {
 
   //💩💩💩💩💩💩💩💩💩💩💩💩💩
   private validateUsername(control: AbstractControl): ValidationErrors | null {
-    this._userService.exist(control.value).then( result => {
-      if (result === true) {
-        control.setErrors( {'usernameAlreadyExists': true});
-      }
-    } );
+    if (control.value.length > 0) {
+      this._userService.exist(control.value).then( result => {
+        if (result === true) {
+          control.setErrors( {'usernameAlreadyExists': true});
+        }
+      } );
+    }
     return null;
   }
   //🤢🤢🤢🤢🤢🤢🤢🤢🤢🤢🤢🤢🤢

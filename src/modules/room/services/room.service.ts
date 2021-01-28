@@ -13,12 +13,12 @@ export class RoomService {
 
     async create(name: string, type: RoomType): Promise<Room> {
         const room = await this.commands.create(name, type);
-        this.store.mutate( s => {
-            return {
-                ...s,
-                rooms: [...s.rooms, room]
-            }
-        })
+        // this.store.mutate( s => {
+        //     return {
+        //         ...s,
+        //         rooms: [...s.rooms, room]
+        //     }
+        // })
         return room;
     }
 

@@ -1,10 +1,26 @@
-<!-- <div  [ngStyle]="{'background-color': notification.unread ? 'green' : 'white'}">
+<div (click)="redirect()" class="notification" [ngStyle]="{'background-color': !notification.viewedAt ? 'green' : 'white'}">
   <div class="notification-author-photo"
-    [ngStyle]="{'background-image': 'url(' + notification.data.user.photoUrl + ')'}"></div>
-  {{notification.data.user.username}}
-
-  <span *ngIf="notification.subject === 'post_liked'"> a aimé votre post</span>
-  <span *ngIf="notification.subject === 'room_created'"> a crée une salle</span>
-  le {{dateZone | date:'dd-MM-yyyy HH:mm:ss'}}
-  <hr>
-</div> -->
+    [ngStyle]="{'background-image': 'url(' + notification.payload.user.photoUrl + ')'}">
+    <div>
+    </div>
+  </div>
+  <div class="notification-content">
+    <span> {{notification.payload.user.username}} </span>
+    <ng-container [ngSwitch]="true">
+      <div *ngSwitchCase="notification.subject === 'post_liked'">
+        <span> a aimé votre post</span>
+      </div>
+      <div *ngSwitchCase="notification.subject === 'room_added'" style="text-align: center;">
+        <span> a créé la room : </span>
+        <div style="text-align: center; word-break: break-all;">
+          {{notification.payload.room.name}}
+        </div>
+      </div>
+      <div *ngSwitchDefault><span> join the battle ! </span></div>
+    </ng-container>
+    <div class="notification-content-date">
+     {{dateZone | date:'dd-MM-yyyy HH:mm:ss'}}
+    </div>
+  </div>
+</div>
+<hr>

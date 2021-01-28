@@ -3,6 +3,8 @@ import { NgForm, FormBuilder, FormGroup, FormControl, Validators } from '@angula
 import { Router } from '@angular/router';
 import { NzMessageService } from "ng-zorro-antd/message";
 import { AuthenticationService } from '../../services/authentication.service';
+import { NotificationService } from 'src/modules/notification/services/notification.service';
+import { NotificationWebService } from 'src/modules/notification/services/notification.web.service';
 
 class LoginFormModel {
   username = "";
@@ -24,6 +26,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthenticationService,
     private nzMessageService: NzMessageService,
     private formBuilder: FormBuilder,
+    private notificationWebService : NotificationWebService
   ) { }
 
   ngOnInit(): void {
@@ -37,11 +40,11 @@ export class LoginComponent implements OnInit {
     this.router.navigate(["splash", "register"]);
   }
 
-  submit(login : LoginFormModel) {
+  submit(login: LoginFormModel) {
     this.login(login);
   }
 
-  async login(login : LoginFormModel) {
+  async login(login: LoginFormModel) {
     if (this.ngForm.invalid) {
       return;
     }
@@ -50,9 +53,11 @@ export class LoginComponent implements OnInit {
     try {
       // TODO vérifier le résultat de l'authentification. Rediriger sur "/" en cas de succès ou afficher une erreur en cas d'échec
       var authenticate = await this.authService.authenticate(login.username, login.password);
-      if(authenticate.success){
+      if (authenticate.success) {
+
+        this.notificationWebService.requestPermission();
         this.router.navigate(["/"]);
-      }else{
+      } else {
         // this.nzMessageService.error(authenticate.reason);
         this.nzMessageService.error("Le nom ou le mot de passe de l'utilisateur est incorrect");
       }

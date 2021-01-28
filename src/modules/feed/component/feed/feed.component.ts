@@ -27,7 +27,6 @@ export class FeedComponent implements OnInit {
     this.store.onRoomIdChange(async roomId => {
       if (roomId) {
         this.socketService.onNewPost(roomId, post => {
-          // if(post.createdBy.)
           this.store.appendPost(post);
         })
         await this.postService.fetch(roomId, {

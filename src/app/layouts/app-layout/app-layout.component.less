@@ -7,13 +7,14 @@
 .app-layout {
   height: 100%;
   display: flex;
+  // overflow: hidden;
 
   .panel-drawer {
+    overflow: auto;
     position: absolute;
     width: 200px;
     height: 100%;
     max-height: 100%;
-    overflow: hidden;
     box-shadow: 1px 0 15px 0px rgba(0, 0, 0, .1);
     left: 40px;
     z-index: 1;
@@ -33,6 +34,10 @@
 
     .panel-head {
       height: 200px;
+    }
+
+    .panel-body {
+      height: calc(100vh - 200px);
     }
   }
 
